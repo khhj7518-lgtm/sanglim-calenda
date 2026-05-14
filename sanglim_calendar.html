@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>상림기술 프로젝트 캘린더</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
@@ -14,6 +17,8 @@
     --text: #1a1f2e;
     --text-muted: #8892a4;
     --today-ring: #4f6ef7;
+
+    /* 공고 타입 색상 */
     --color-pink: #e8305a;
     --color-pink-light: #fde8ed;
     --color-pink-border: #f5a3b5;
@@ -24,6 +29,7 @@
     --color-holiday-light: #fee2e2;
     --color-event: #7c3aed;
     --color-event-light: #ede9fe;
+
     --header-h: 56px;
     --cell-min-h: 110px;
   }
@@ -37,6 +43,7 @@
     min-height: 100vh;
   }
 
+  /* ── TOP BAR ── */
   .topbar {
     background: var(--surface);
     border-bottom: 1px solid var(--border);
@@ -49,9 +56,19 @@
     top: 0;
     z-index: 100;
   }
-  .logo { font-size: 15px; font-weight: 700; color: var(--text); letter-spacing: -0.3px; white-space: nowrap; }
+  .logo {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.3px;
+    white-space: nowrap;
+  }
   .logo span { color: var(--color-pink); }
-  .nav-btns { display: flex; align-items: center; gap: 4px; }
+  .nav-btns {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
   .nav-btn {
     width: 32px; height: 32px;
     border: 1px solid var(--border);
@@ -64,7 +81,12 @@
     color: var(--text);
   }
   .nav-btn:hover { background: var(--bg); }
-  .month-title { font-size: 18px; font-weight: 700; min-width: 120px; letter-spacing: -0.5px; }
+  .month-title {
+    font-size: 18px;
+    font-weight: 700;
+    min-width: 120px;
+    letter-spacing: -0.5px;
+  }
   .today-btn {
     padding: 6px 14px;
     border: 1px solid var(--border);
@@ -79,6 +101,7 @@
   }
   .today-btn:hover { background: var(--bg); }
 
+  /* ── LEGEND ── */
   .legend {
     display: flex;
     align-items: center;
@@ -89,22 +112,47 @@
     font-size: 12px;
     flex-wrap: wrap;
   }
-  .legend-item { display: flex; align-items: center; gap: 6px; color: var(--text-muted); }
-  .legend-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-muted);
+  }
+  .legend-dot {
+    width: 10px; height: 10px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
 
-  .cal-wrapper { padding: 16px 16px 32px; }
+  /* ── CALENDAR WRAPPER ── */
+  .cal-wrapper {
+    padding: 16px 16px 32px;
+  }
 
+  /* ── DAY HEADERS ── */
   .day-headers {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 2px;
     margin-bottom: 2px;
   }
-  .day-header { text-align: center; padding: 8px 0; font-size: 12px; font-weight: 500; color: var(--text-muted); letter-spacing: 0.5px; }
+  .day-header {
+    text-align: center;
+    padding: 8px 0;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+  }
   .day-header.sun { color: #ef4444; }
   .day-header.sat { color: #3b82f6; }
 
-  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+  /* ── GRID ── */
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+  }
 
   .cal-cell {
     background: var(--surface);
@@ -120,9 +168,14 @@
   .cal-cell.other-month .cell-date { color: #c9cdd4; }
 
   .cell-date {
-    font-size: 13px; font-weight: 500; color: var(--text);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
     margin-bottom: 5px;
-    display: flex; align-items: center; justify-content: flex-end; gap: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 4px;
   }
   .cell-date.sun { color: #ef4444; }
   .cell-date.sat { color: #3b82f6; }
@@ -132,84 +185,269 @@
     background: var(--today-ring);
     color: #fff;
     border-radius: 50%;
-    font-size: 12px; font-weight: 700;
+    font-size: 12px;
+    font-weight: 700;
     display: flex; align-items: center; justify-content: center;
   }
 
+  /* ── EVENT CHIPS ── */
   .event-chip {
-    display: flex; align-items: center; gap: 5px;
-    font-size: 11px; font-weight: 500;
-    padding: 3px 7px; border-radius: 4px; margin-bottom: 2px;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    cursor: pointer; line-height: 1.4; transition: filter .1s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 7px;
+    border-radius: 4px;
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    line-height: 1.4;
+    transition: filter .1s;
   }
   .event-chip:hover { filter: brightness(.93); }
-  .chip-pink { background: var(--color-pink-light); color: var(--color-pink); border-left: 3px solid var(--color-pink); }
-  .chip-gray { background: var(--color-gray-light); color: var(--color-gray); border-left: 3px solid var(--color-gray); }
-  .chip-holiday { background: var(--color-holiday-light); color: var(--color-holiday); border-left: 3px solid var(--color-holiday); font-weight: 600; }
-  .chip-event { background: var(--color-event-light); color: var(--color-event); border-left: 3px solid var(--color-event); }
-  .chip-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
 
-  .cal-cell.has-submit { background: #fffdf5; outline: 2px solid #f59e0b; outline-offset: -2px; }
+  /* 본공고 - 핑크 */
+  .chip-pink {
+    background: var(--color-pink-light);
+    color: var(--color-pink);
+    border-left: 3px solid var(--color-pink);
+  }
+  /* 사규 - 회색 */
+  .chip-gray {
+    background: var(--color-gray-light);
+    color: var(--color-gray);
+    border-left: 3px solid var(--color-gray);
+  }
+  /* 공휴일 - 빨강 */
+  .chip-holiday {
+    background: var(--color-holiday-light);
+    color: var(--color-holiday);
+    border-left: 3px solid var(--color-holiday);
+    font-weight: 600;
+  }
+  /* 기타 이벤트 - 보라 */
+  .chip-event {
+    background: var(--color-event-light);
+    color: var(--color-event);
+    border-left: 3px solid var(--color-event);
+  }
+
+  /* 멀티위크 이벤트 (날짜 걸침) - span 표현 */
+  .chip-span {
+    border-radius: 0;
+    margin: 0 -6px 2px;
+    padding-left: 9px;
+  }
+  .chip-span.span-start { border-radius: 4px 0 0 4px; margin-left: 0; padding-left: 7px; }
+  .chip-span.span-end   { border-radius: 0 4px 4px 0; margin-right: 0; }
+
+  .chip-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    flex-shrink: 0;
+  }
+
+  /* ── 제출일 마크 ── */
+  .cal-cell.has-submit {
+    background: #fffdf5;
+    outline: 2px solid #f59e0b;
+    outline-offset: -2px;
+  }
+
   .submit-block {
     margin-top: 4px;
     background: linear-gradient(135deg, #f59e0b 0%, #ef7c00 100%);
-    border-radius: 6px; padding: 8px 8px 7px; cursor: pointer;
+    border-radius: 6px;
+    padding: 8px 8px 7px;
+    cursor: pointer;
     transition: filter .15s, transform .1s;
     box-shadow: 0 2px 8px rgba(245,158,11,.35);
   }
   .submit-block:hover { filter: brightness(1.07); transform: translateY(-1px); }
-  .submit-block .sb-icon { font-size: 18px; line-height: 1; display: block; margin-bottom: 3px; }
-  .submit-block .sb-label { font-size: 10px; font-weight: 800; color: rgba(255,255,255,.85); letter-spacing: .3px; display: block; line-height: 1.2; }
-  .submit-block .sb-title { font-size: 12px; font-weight: 700; color: #fff; display: block; margin-top: 2px; line-height: 1.35; word-break: keep-all; }
+  .submit-block .sb-icon {
+    font-size: 18px;
+    line-height: 1;
+    display: block;
+    margin-bottom: 3px;
+  }
+  .submit-block .sb-label {
+    font-size: 10px;
+    font-weight: 800;
+    color: rgba(255,255,255,.85);
+    letter-spacing: .3px;
+    display: block;
+    line-height: 1.2;
+  }
+  .submit-block .sb-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+    display: block;
+    margin-top: 2px;
+    line-height: 1.35;
+    word-break: keep-all;
+  }
 
-  .cal-cell.has-main { background: #fff8f3; outline: 2px solid #ea580c; outline-offset: -2px; }
+  /* ── 주사업자 블록 ── */
+  .cal-cell.has-main {
+    background: #fff8f3;
+    outline: 2px solid #ea580c;
+    outline-offset: -2px;
+  }
+
   .main-block {
     margin-top: 4px;
     background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
-    border-radius: 6px; padding: 8px 8px 7px; cursor: pointer;
+    border-radius: 6px;
+    padding: 8px 8px 7px;
+    cursor: pointer;
     transition: filter .15s, transform .1s;
     box-shadow: 0 2px 8px rgba(234,88,12,.3);
   }
   .main-block:hover { filter: brightness(1.1); transform: translateY(-1px); }
   .main-block .sb-icon { font-size: 18px; line-height: 1; display: block; margin-bottom: 3px; }
-  .main-block .sb-label { font-size: 10px; font-weight: 800; color: rgba(255,255,255,.8); letter-spacing: .3px; display: block; line-height: 1.2; }
-  .main-block .sb-title { font-size: 12px; font-weight: 700; color: #fff; display: block; margin-top: 2px; line-height: 1.35; word-break: keep-all; }
+  .main-block .sb-label {
+    font-size: 10px; font-weight: 800;
+    color: rgba(255,255,255,.8);
+    letter-spacing: .3px; display: block; line-height: 1.2;
+  }
+  .main-block .sb-title {
+    font-size: 12px; font-weight: 700;
+    color: #fff; display: block;
+    margin-top: 2px; line-height: 1.35; word-break: keep-all;
+  }
   .badge-main { background: #ffedd5; color: #ea580c; }
+  .cal-cell.has-sub {
+    background: #f5f3ff;
+    outline: 2px solid #7c3aed;
+    outline-offset: -2px;
+  }
+  .cal-cell.has-submit.has-sub {
+    outline: 2px solid #f59e0b;
+  }
 
-  .cal-cell.has-sub { background: #f5f3ff; outline: 2px solid #7c3aed; outline-offset: -2px; }
-  .cal-cell.has-submit.has-sub { outline: 2px solid #f59e0b; }
   .sub-block {
     margin-top: 4px;
     background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
-    border-radius: 6px; padding: 8px 8px 7px; cursor: pointer;
+    border-radius: 6px;
+    padding: 8px 8px 7px;
+    cursor: pointer;
     transition: filter .15s, transform .1s;
     box-shadow: 0 2px 8px rgba(124,58,237,.3);
   }
   .sub-block:hover { filter: brightness(1.1); transform: translateY(-1px); }
   .sub-block .sb-icon { font-size: 18px; line-height: 1; display: block; margin-bottom: 3px; }
-  .sub-block .sb-label { font-size: 10px; font-weight: 800; color: rgba(255,255,255,.8); letter-spacing: .3px; display: block; line-height: 1.2; }
-  .sub-block .sb-title { font-size: 12px; font-weight: 700; color: #fff; display: block; margin-top: 2px; line-height: 1.35; word-break: keep-all; }
+  .sub-block .sb-label {
+    font-size: 10px; font-weight: 800;
+    color: rgba(255,255,255,.8);
+    letter-spacing: .3px; display: block; line-height: 1.2;
+  }
+  .sub-block .sb-title {
+    font-size: 12px; font-weight: 700;
+    color: #fff; display: block;
+    margin-top: 2px; line-height: 1.35; word-break: keep-all;
+  }
   .badge-sub { background: #ede9fe; color: #7c3aed; }
 
+  /* ── D-DAY 배너 ── */
+  .dday-banner {
+    background: linear-gradient(90deg, #1e293b 0%, #0f172a 100%);
+    padding: 10px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid #334155;
+  }
+  .dday-banner .dday-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #94a3b8;
+    letter-spacing: 1px;
+    white-space: nowrap;
+  }
+  .dday-chip {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 12px;
+    color: #e2e8f0;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .dday-chip .dday-num {
+    font-size: 13px;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 10px;
+  }
+  .dday-chip .dday-num.urgent  { background: #ef4444; color: #fff; }
+  .dday-chip .dday-num.soon    { background: #f59e0b; color: #fff; }
+  .dday-chip .dday-num.normal  { background: #3b82f6; color: #fff; }
+  .dday-chip .dday-num.dday0   { background: #10b981; color: #fff; animation: pulse 1s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.6} }
   .modal-overlay {
-    display: none; position: fixed; inset: 0;
-    background: rgba(0,0,0,.35); z-index: 200;
-    align-items: center; justify-content: center;
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,.35);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
   }
   .modal-overlay.open { display: flex; }
-  .modal { background: #fff; border-radius: 14px; padding: 24px; width: 360px; max-width: 90vw; box-shadow: 0 20px 60px rgba(0,0,0,.2); }
-  .modal-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
-  .modal-type-badge { padding: 3px 9px; border-radius: 20px; font-size: 11px; font-weight: 600; white-space: nowrap; flex-shrink: 0; }
+  .modal {
+    background: #fff;
+    border-radius: 14px;
+    padding: 24px;
+    width: 360px;
+    max-width: 90vw;
+    box-shadow: 0 20px 60px rgba(0,0,0,.2);
+  }
+  .modal-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .modal-type-badge {
+    padding: 3px 9px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
   .badge-pink { background: var(--color-pink-light); color: var(--color-pink); }
   .badge-gray { background: var(--color-gray-light); color: var(--color-gray); }
   .modal h3 { font-size: 15px; font-weight: 700; line-height: 1.4; }
-  .modal-row { display: flex; gap: 8px; font-size: 13px; color: var(--text-muted); margin-bottom: 6px; }
+  .modal-row {
+    display: flex;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+  }
   .modal-row span:first-child { font-weight: 500; color: var(--text); min-width: 56px; }
   .modal-close {
-    display: block; margin-top: 18px; width: 100%; padding: 10px;
-    background: var(--bg); border: none; border-radius: 8px;
-    font-size: 14px; cursor: pointer; font-family: 'Noto Sans KR', sans-serif; transition: background .15s;
+    display: block;
+    margin-top: 18px;
+    width: 100%;
+    padding: 10px;
+    background: var(--bg);
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    font-family: 'Noto Sans KR', sans-serif;
+    transition: background .15s;
   }
   .modal-close:hover { background: var(--border); }
 </style>
@@ -226,6 +464,9 @@
   <div class="month-title" id="monthTitle"></div>
   <button class="today-btn" id="todayBtn">오늘</button>
 </div>
+
+<!-- D-DAY 배너 -->
+<div class="dday-banner" id="ddayBanner"></div>
 
 <!-- LEGEND -->
 <div class="legend">
@@ -245,6 +486,7 @@
     <span style="font-size:13px;">⭐</span>
     <span style="color:#c2410c; font-weight:600;">주사업자 마감일</span>
   </div>
+</div>
 </div>
 
 <!-- CALENDAR -->
@@ -277,244 +519,714 @@
 </div>
 
 <script>
+// ────────────────────────────────────────────────
+// DATA  (캘린더에서 읽은 내용 기반)
+// type: 'pink'=본공고, 'gray'=사규, 'holiday'=공휴일, 'event'=기타
+// startDate / endDate: "YYYY-MM-DD"
+// ────────────────────────────────────────────────
 const EVENTS = [
+  // ── 공휴일 ──
   { id:1, type:'holiday', title:'노동절',   startDate:'2026-05-01', endDate:'2026-05-01' },
   { id:2, type:'holiday', title:'어린이날', startDate:'2026-05-05', endDate:'2026-05-05' },
   { id:3, type:'holiday', title:'현충일',   startDate:'2026-06-06', endDate:'2026-06-06' },
-  { id:20, type:'main', title:'상주시 긴급차량 우선신호시스템 고도화', startDate:'2026-06-02', endDate:'2026-06-02', submitDate:'2026-06-02', amount:'541,402,200원', note:'입찰공고번호: R26BK01513268-000 / 수요기관: 한국지역정보개발원 / 접수개시: 2026-05-29 10:00 / 마감: 2026-06-02 10:00 / 제한경쟁입찰·협상계약' },
-  { id:30, type:'sub',  title:'부산광역시 버스정보관리시스템(BIMS) 추가 및 개선사업', startDate:'2026-05-19', endDate:'2026-05-19', submitDate:'2026-05-19', amount:'500,000,000원', note:'공동수급협정서 나라장터 전자제출 / 공동이행방식 / 5개사 이내 / 지분 5%↑ / 주사업자: 에이치투 (전자제출)' },
-  { id:31, type:'sub',  title:'광명 2026년 스마트 버스정류장 구축(2차)', startDate:'2026-05-18', endDate:'2026-05-18', submitDate:'2026-05-18', amount:'110,000,000원', note:'주사업자: 에이치투테크 / 방문접수만 가능(10:00~16:00) / 기술제안서: 광명시 스마트도시과 / 가격제안서: 광명시청 1층 회계과' },
-  { id:40, type:'sub',  title:'성남 S-BRT 1단계(산성대로) 버스정류장 구매 및 설치', startDate:'2026-05-22', endDate:'2026-05-22', submitDate:'2026-05-22', amount:'4,149,470,000원', note:'부사업자 / 제안서 제출 10:00~17:00 / 17:30 평가위원 추첨(대표 필참) / 21일 인쇄 필수 / 성남시 대중교통과 버스시설팀 031-729-8623' },
+
+  // ── 본공고 마감일 ──
+  {
+    id:20, type:'main',
+    title:'상주시 긴급차량 우선신호시스템 고도화',
+    startDate:'2026-06-02', endDate:'2026-06-02',
+    submitDate:'2026-06-02',
+    amount:'541,402,200원',
+    note:'입찰공고번호: R26BK01513268-000 / 수요기관: 한국지역정보개발원 / 접수개시: 2026-05-29 10:00 / 마감: 2026-06-02 10:00 / 제한경쟁입찰·협상계약'
+  },
+  {
+    id:30, type:'sub',
+    title:'부산광역시 버스정보관리시스템(BIMS) 추가 및 개선사업',
+    startDate:'2026-05-19', endDate:'2026-05-19',
+    submitDate:'2026-05-19',
+    amount:'500,000,000원',
+    note:'공동수급협정서 나라장터 전자제출 / 공동이행방식 / 5개사 이내 / 지분 5%↑ / 주사업자: 에이치투 (전자제출)'
+  },
+  {
+    id:31, type:'sub',
+    title:'광명 2026년 스마트 버스정류장 구축(2차)',
+    startDate:'2026-05-18', endDate:'2026-05-18',
+    submitDate:'2026-05-18',
+    amount:'110,000,000원',
+    note:'주사업자: 에이치투테크 / 방문접수만 가능(10:00~16:00) / 기술제안서: 광명시 스마트도시과 / 가격제안서: 광명시청 1층 회계과'
+  },
+  {
+    id:40, type:'sub',
+    title:'성남 S-BRT 1단계(산성대로) 버스정류장 구매 및 설치',
+    startDate:'2026-05-22', endDate:'2026-05-22',
+    submitDate:'2026-05-22',
+    amount:'4,149,470,000원',
+    note:'부사업자 / 제안서 제출 10:00~17:00 / 17:30 평가위원 추첨(대표 필참) / 21일 인쇄 필수 / 성남시 대중교통과 버스시설팀 031-729-8623'
+  },
 ];
 
+// ────────────────────────────────────────────────
+// STATE
+// ────────────────────────────────────────────────
 const TODAY = new Date();
 let currentYear  = TODAY.getFullYear();
-let currentMonth = TODAY.getMonth();
+let currentMonth = TODAY.getMonth(); // 0-indexed
 
+// ────────────────────────────────────────────────
+// RENDER
+// ────────────────────────────────────────────────
 function dateStr(y,m,d){ return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`; }
 function parseDate(s){ const [y,m,d]=s.split('-').map(Number); return new Date(y,m-1,d); }
-function eventsOnDate(ds){ return EVENTS.filter(e => { const s=parseDate(e.startDate),en=parseDate(e.endDate),d=parseDate(ds); return d>=s&&d<=en; }); }
+
+function eventsOnDate(ds){
+  return EVENTS.filter(e => {
+    const s=parseDate(e.startDate), en=parseDate(e.endDate);
+    const d=parseDate(ds);
+    return d>=s && d<=en;
+  });
+}
+
 function typeLabel(t){ return t==='pink'?'본공고':t==='main'?'주사업자':t==='gray'?'사규':t==='sub'?'부사업자':t==='holiday'?'공휴일':'일정'; }
 function badgeClass(t){ return t==='pink'?'badge-pink':t==='main'?'badge-main':t==='sub'?'badge-sub':'badge-gray'; }
 
 function renderMonth(){
   const grid = document.getElementById('calGrid');
   grid.innerHTML = '';
-  document.getElementById('monthTitle').textContent = `${currentYear}년 ${currentMonth+1}월`;
+
+  document.getElementById('monthTitle').textContent =
+    `${currentYear}년 ${currentMonth+1}월`;
+
   const firstDay = new Date(currentYear, currentMonth, 1).getDay();
   const daysInMonth = new Date(currentYear, currentMonth+1, 0).getDate();
   const daysInPrev  = new Date(currentYear, currentMonth, 0).getDate();
+
   const cells = [];
-  for(let i=firstDay-1;i>=0;i--) cells.push({ y:currentYear, m:currentMonth-1, d:daysInPrev-i, other:true });
-  for(let d=1;d<=daysInMonth;d++) cells.push({ y:currentYear, m:currentMonth, d, other:false });
+  // prev month tail
+  for(let i=firstDay-1;i>=0;i--){
+    cells.push({ y:currentYear, m:currentMonth-1, d:daysInPrev-i, other:true });
+  }
+  // current month
+  for(let d=1;d<=daysInMonth;d++){
+    cells.push({ y:currentYear, m:currentMonth, d, other:false });
+  }
+  // next month head
   const remainder = 42 - cells.length;
-  for(let d=1;d<=remainder;d++) cells.push({ y:currentYear, m:currentMonth+1, d, other:true });
+  for(let d=1;d<=remainder;d++){
+    cells.push({ y:currentYear, m:currentMonth+1, d, other:true });
+  }
 
   cells.forEach(({y,m,d,other})=>{
     const realY = m<0?y-1:(m>11?y+1:y);
     const realM = ((m%12)+12)%12;
     const ds = dateStr(realY,realM,d);
+
     const cell = document.createElement('div');
     cell.className = 'cal-cell' + (other?' other-month':'');
+
+    // 제출일 해당 여부 체크
     const submitEvs = EVENTS.filter(e => e.submitDate === ds);
     if(submitEvs.length > 0) cell.classList.add('has-submit');
-    if(submitEvs.some(e => e.type === 'sub'))  cell.classList.add('has-sub');
+    if(submitEvs.some(e => e.type === 'sub')) cell.classList.add('has-sub');
     if(submitEvs.some(e => e.type === 'main')) cell.classList.add('has-main');
+
     const dow = new Date(realY,realM,d).getDay();
     const isToday = ds===dateStr(TODAY.getFullYear(),TODAY.getMonth(),TODAY.getDate());
+
+    // date number
     const dateDiv = document.createElement('div');
     dateDiv.className = 'cell-date' + (dow===0?' sun':dow===6?' sat':'');
-    if(isToday){ const b=document.createElement('div'); b.className='today-badge'; b.textContent=d; dateDiv.appendChild(b); }
-    else dateDiv.textContent = d;
+    if(isToday){
+      const badge = document.createElement('div');
+      badge.className = 'today-badge';
+      badge.textContent = d;
+      dateDiv.appendChild(badge);
+    } else {
+      dateDiv.textContent = d;
+    }
     cell.appendChild(dateDiv);
+
+    // 제출일 블록 렌더
     submitEvs.forEach(ev => {
-      const isSub=ev.type==='sub', isMain=ev.type==='main';
-      const block=document.createElement('div');
-      block.className = isMain?'main-block':isSub?'sub-block':'submit-block';
-      const shortTitle = ev.title.length>14?ev.title.slice(0,13)+'…':ev.title;
-      block.innerHTML=`<span class="sb-icon">${isMain?'⭐':isSub?'🤝':'📌'}</span><span class="sb-label">${isMain?'주사업자 마감':isSub?'부사업자 마감':'제출 마감'}</span><span class="sb-title">${shortTitle}</span>`;
-      block.addEventListener('click',()=>openModal(ev));
+      const isSub = ev.type === 'sub';
+      const isMain = ev.type === 'main';
+      const block = document.createElement('div');
+      block.className = isMain ? 'main-block' : isSub ? 'sub-block' : 'submit-block';
+      const shortTitle = ev.title.length > 14 ? ev.title.slice(0, 13) + '…' : ev.title;
+      block.innerHTML = `
+        <span class="sb-icon">${isMain ? '⭐' : isSub ? '🤝' : '📌'}</span>
+        <span class="sb-label">${isMain ? '주사업자 마감' : isSub ? '부사업자 마감' : '제출 마감'}</span>
+        <span class="sb-title">${shortTitle}</span>
+      `;
+      block.addEventListener('click', () => openModal(ev));
       cell.appendChild(block);
     });
+
+    // events
     const evs = eventsOnDate(ds);
-    evs.sort((a,b)=>({holiday:0,event:1,pink:2,gray:3}[a.type]-{holiday:0,event:1,pink:2,gray:3}[b.type]));
+    // sort: holiday first, then pink, gray, event
+    const order = {holiday:0,event:1,pink:2,gray:3};
+    evs.sort((a,b)=>order[a.type]-order[b.type]);
+
     evs.forEach(ev=>{
-      const chip=document.createElement('div');
-      chip.className=`event-chip ${ev.type==='pink'?'chip-pink':ev.type==='gray'?'chip-gray':ev.type==='holiday'?'chip-holiday':'chip-event'}`;
-      const dot=document.createElement('div'); dot.className='chip-dot'; chip.appendChild(dot);
-      const label=document.createElement('span');
-      label.textContent=ev.title.length>16?ev.title.slice(0,15)+'…':ev.title;
+      const chip = document.createElement('div');
+      const chipClass = ev.type==='pink'?'chip-pink':ev.type==='gray'?'chip-gray':ev.type==='holiday'?'chip-holiday':'chip-event';
+      chip.className = `event-chip ${chipClass}`;
+
+      // dot
+      const dot = document.createElement('div');
+      dot.className = 'chip-dot';
+      chip.appendChild(dot);
+
+      const label = document.createElement('span');
+      // truncate long titles
+      let titleShort = ev.title;
+      if(titleShort.length>16) titleShort=titleShort.slice(0,15)+'…';
+      label.textContent = titleShort;
       chip.appendChild(label);
-      chip.addEventListener('click',()=>openModal(ev));
+
+      chip.addEventListener('click', ()=>openModal(ev));
       cell.appendChild(chip);
     });
+
     grid.appendChild(cell);
   });
 }
 
 function openModal(ev){
   document.getElementById('modalBadge').textContent = typeLabel(ev.type);
-  document.getElementById('modalBadge').className = 'modal-type-badge ' + badgeClass(ev.type);
+  document.getElementById('modalBadge').className = 'modal-type-badge ' +
+    (ev.type==='pink'||ev.type==='gray' ? badgeClass(ev.type) : 'badge-gray');
   document.getElementById('modalTitle').textContent = ev.title;
-  const s=ev.startDate,e=ev.endDate;
-  document.getElementById('modalDate').textContent = s===e?s:`${s} ~ ${e}`;
+
+  const s=ev.startDate, e=ev.endDate;
+  document.getElementById('modalDate').textContent = s===e ? s : `${s} ~ ${e}`;
+
   const amRow=document.getElementById('modalAmountRow');
-  if(ev.amount){ amRow.style.display='flex'; document.getElementById('modalAmount').textContent=ev.amount; } else amRow.style.display='none';
+  if(ev.amount){ amRow.style.display='flex'; document.getElementById('modalAmount').textContent=ev.amount; }
+  else amRow.style.display='none';
+
   const tRow=document.getElementById('modalTimeRow');
-  if(ev.time){ tRow.style.display='flex'; document.getElementById('modalTime').textContent=ev.time; } else tRow.style.display='none';
+  if(ev.time){ tRow.style.display='flex'; document.getElementById('modalTime').textContent=ev.time; }
+  else tRow.style.display='none';
+
   const nRow=document.getElementById('modalNoteRow');
-  if(ev.note){ nRow.style.display='flex'; document.getElementById('modalNote').textContent=ev.note; } else nRow.style.display='none';
-  let submitRow=document.getElementById('modalSubmitRow');
-  if(!submitRow){ submitRow=document.createElement('div'); submitRow.className='modal-row'; submitRow.id='modalSubmitRow'; submitRow.innerHTML='<span>📌 제출마감</span><span id="modalSubmitDate" style="color:#d97706;font-weight:600;"></span>'; document.getElementById('modalNoteRow').after(submitRow); }
-  if(ev.submitDate){ submitRow.style.display='flex'; document.getElementById('modalSubmitDate').textContent=ev.submitDate; } else submitRow.style.display='none';
+  if(ev.note){ nRow.style.display='flex'; document.getElementById('modalNote').textContent=ev.note; }
+  else nRow.style.display='none';
+
+  // 제출일 행
+  let submitRow = document.getElementById('modalSubmitRow');
+  if(!submitRow){
+    submitRow = document.createElement('div');
+    submitRow.className = 'modal-row';
+    submitRow.id = 'modalSubmitRow';
+    submitRow.innerHTML = '<span>📌 제출마감</span><span id="modalSubmitDate" style="color:#d97706;font-weight:600;"></span>';
+    document.getElementById('modalNoteRow').after(submitRow);
+  }
+  if(ev.submitDate){
+    submitRow.style.display='flex';
+    document.getElementById('modalSubmitDate').textContent = ev.submitDate;
+  } else {
+    submitRow.style.display='none';
+  }
+
   document.getElementById('modalOverlay').classList.add('open');
 }
 
-document.getElementById('modalClose').addEventListener('click',()=>{ document.getElementById('modalOverlay').classList.remove('open'); });
-document.getElementById('modalOverlay').addEventListener('click',e=>{ if(e.target===document.getElementById('modalOverlay')) document.getElementById('modalOverlay').classList.remove('open'); });
-document.getElementById('prevBtn').addEventListener('click',()=>{ currentMonth--; if(currentMonth<0){currentMonth=11;currentYear--;} renderMonth(); });
-document.getElementById('nextBtn').addEventListener('click',()=>{ currentMonth++; if(currentMonth>11){currentMonth=0;currentYear++;} renderMonth(); });
-document.getElementById('todayBtn').addEventListener('click',()=>{ currentYear=TODAY.getFullYear(); currentMonth=TODAY.getMonth(); renderMonth(); });
+document.getElementById('modalClose').addEventListener('click',()=>{
+  document.getElementById('modalOverlay').classList.remove('open');
+});
+document.getElementById('modalOverlay').addEventListener('click', e=>{
+  if(e.target===document.getElementById('modalOverlay'))
+    document.getElementById('modalOverlay').classList.remove('open');
+});
+
+document.getElementById('prevBtn').addEventListener('click',()=>{
+  currentMonth--;
+  if(currentMonth<0){currentMonth=11;currentYear--;}
+  renderMonth();
+});
+document.getElementById('nextBtn').addEventListener('click',()=>{
+  currentMonth++;
+  if(currentMonth>11){currentMonth=0;currentYear++;}
+  renderMonth();
+});
+document.getElementById('todayBtn').addEventListener('click',()=>{
+  currentYear=TODAY.getFullYear();
+  currentMonth=TODAY.getMonth();
+  renderMonth();
+});
+
+// 캘린더 이미지가 5월이므로 초기 표시도 5/6월 확인 가능하게 오늘 기준
 renderMonth();
+
+// ── D-DAY 배너 ──
+function renderDday() {
+  const banner = document.getElementById('ddayBanner');
+  const todayMs = new Date(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate()).getTime();
+
+  // submitDate 있는 이벤트만, 이미 지난 것 제외
+  const upcoming = EVENTS
+    .filter(e => e.submitDate)
+    .map(e => {
+      const d = new Date(e.submitDate);
+      const dMs = new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+      const diff = Math.round((dMs - todayMs) / (1000*60*60*24));
+      return { ...e, diff };
+    })
+    .filter(e => e.diff >= 0)
+    .sort((a,b) => a.diff - b.diff);
+
+  if(upcoming.length === 0) {
+    banner.style.display = 'none';
+    return;
+  }
+
+  const typeIcon = t => t==='main'?'⭐':t==='sub'?'🤝':'📌';
+  const shortName = t => t.length > 15 ? t.slice(0,14)+'…' : t;
+
+  let html = `<span class="dday-label">📅 D-DAY</span>`;
+  upcoming.forEach(e => {
+    const cls = e.diff===0 ? 'dday0' : e.diff<=3 ? 'urgent' : e.diff<=7 ? 'soon' : 'normal';
+    const label = e.diff===0 ? 'D-DAY!' : `D-${e.diff}`;
+    html += `
+      <div class="dday-chip">
+        ${typeIcon(e.type)}
+        <span>${shortName(e.title)}</span>
+        <span class="dday-num ${cls}">${label}</span>
+      </div>`;
+  });
+
+  banner.innerHTML = html;
+}
+renderDday();
 </script>
 
-<!-- 🐹 햄스터 -->
+<!-- 🐹 햄스터 캐릭터 -->
 <canvas id="hamsterCanvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;"></canvas>
-<script>
-const canvas=document.getElementById('hamsterCanvas');
-const ctx=canvas.getContext('2d');
-function resize(){ canvas.width=window.innerWidth; canvas.height=window.innerHeight; }
-resize(); window.addEventListener('resize',resize);
 
-const HAMSTERS=[
-  { name:'잼민', bodyColor:'#f4a261', cheekColor:'#f9c784', saying:'그냥 알아서 해!' },
-  { name:'혜진', bodyColor:'#a8dadc', cheekColor:'#caf0f8', saying:'건들지마라' },
-  { name:'승환', bodyColor:'#b5e48c', cheekColor:'#d9f5b0', saying:'오늘은 수육입니다' },
-  { name:'태우', bodyColor:'#c77dff', cheekColor:'#e0aaff', saying:'원고 언제주세요?' },
+<script>
+const canvas = document.getElementById('hamsterCanvas');
+const ctx = canvas.getContext('2d');
+
+function resize(){
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+// 햄스터 정의 (이름 + 색상)
+const HAMSTERS = [
+  { name:'잼민', bodyColor:'#f4a261', cheekColor:'#f9c784', earColor:'#e76f51', saying:'그냥 알아서 해!' },
+  { name:'혜진', bodyColor:'#a8dadc', cheekColor:'#caf0f8', earColor:'#457b9d', saying:'난 달달한 말차라떼' },
+  { name:'승환', bodyColor:'#b5e48c', cheekColor:'#d9f5b0', earColor:'#52b788', saying:'오늘은 수육입니다' },
+  { name:'태우', bodyColor:'#c77dff', cheekColor:'#e0aaff', earColor:'#7b2fff', saying:'원고 언제주세요?' },
 ];
 
-const hamsters=HAMSTERS.map((h,i)=>({
-  ...h, x:120+i*200, y:window.innerHeight-80,
-  vx:(Math.random()*1.5+0.5)*(Math.random()>0.5?1:-1),
-  vy:(Math.random()*0.5-0.25), dir:1,
-  bobOffset:Math.random()*Math.PI*2,
-  blinkTimer:Math.floor(Math.random()*180), isBlinking:false,
-  pauseTimer:0, isPaused:false,
-  showSaying:false, sayingTimer:0,
+// 햄스터 상태 초기화
+const hamsters = HAMSTERS.map((h, i) => ({
+  ...h,
+  x: 120 + i * 200,
+  y: window.innerHeight - 80,
+  vx: (Math.random() * 1.5 + 0.5) * (Math.random() > 0.5 ? 1 : -1),
+  vy: (Math.random() * 0.5 - 0.25),
+  dir: 1,
+  frame: 0,
+  frameTimer: 0,
+  bobOffset: Math.random() * Math.PI * 2,
+  blinkTimer: Math.floor(Math.random() * 180),
+  isBlinking: false,
+  pauseTimer: 0,
+  isPaused: false,
+  // 말풍선
+  showSaying: false,
+  sayingTimer: 0,
 }));
 
-function drawHamster(ctx,h,time){
-  const x=h.x, y=h.y, dir=h.dir;
-  const bob=Math.sin(time*0.005+h.bobOffset)*1.5;
-  const walkCycle=h.isPaused?0:Math.sin(time*0.012+h.bobOffset);
-  ctx.save(); ctx.translate(x,y+bob); ctx.scale(dir,1); ctx.scale(0.65,0.65);
-  ctx.save(); ctx.scale(1,0.25); ctx.beginPath(); ctx.ellipse(0,52,22,7,0,0,Math.PI*2); ctx.fillStyle='rgba(0,0,0,0.13)'; ctx.fill(); ctx.restore();
-  const tilt=h.isPaused?0:walkCycle*0.08; ctx.rotate(tilt);
-  // 귀
-  ctx.beginPath(); ctx.ellipse(-18,-22,11,13,-0.25,0,Math.PI*2); ctx.fillStyle='#7a5230'; ctx.fill();
-  ctx.beginPath(); ctx.ellipse(-18,-22,7,9,-0.25,0,Math.PI*2); ctx.fillStyle=h.cheekColor; ctx.fill();
-  ctx.beginPath(); ctx.ellipse(18,-23,11,13,0.25,0,Math.PI*2); ctx.fillStyle='#7a5230'; ctx.fill();
-  ctx.beginPath(); ctx.ellipse(18,-23,7,9,0.25,0,Math.PI*2); ctx.fillStyle=h.cheekColor; ctx.fill();
-  // 몸통
-  ctx.beginPath(); ctx.ellipse(0,18,26,28,0,0,Math.PI*2); ctx.fillStyle=h.bodyColor; ctx.fill(); ctx.strokeStyle='#7a5230'; ctx.lineWidth=2.5; ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(-18,28); ctx.quadraticCurveTo(0,38,18,28); ctx.strokeStyle='#7a5230'; ctx.lineWidth=2; ctx.stroke();
-  ctx.beginPath(); ctx.ellipse(0,22,16,18,0,0,Math.PI*2); ctx.fillStyle=h.cheekColor; ctx.fill();
-  // 팔
-  const armSwing=walkCycle*5;
-  ctx.beginPath(); ctx.ellipse(-24,14+armSwing,8,11,-0.4,0,Math.PI*2); ctx.fillStyle=h.bodyColor; ctx.fill(); ctx.strokeStyle='#7a5230'; ctx.lineWidth=2; ctx.stroke();
-  ctx.beginPath(); ctx.ellipse(24,14-armSwing,8,11,0.4,0,Math.PI*2); ctx.fillStyle=h.bodyColor; ctx.fill(); ctx.strokeStyle='#7a5230'; ctx.lineWidth=2; ctx.stroke();
-  // 발
-  const legSwing=walkCycle*6;
-  ctx.beginPath(); ctx.ellipse(-12+legSwing*0.3,44-Math.abs(legSwing)*0.3,9,6,legSwing*0.02,0,Math.PI*2); ctx.fillStyle='#f4a0a0'; ctx.fill(); ctx.strokeStyle='#c97070'; ctx.lineWidth=1.5; ctx.stroke();
-  ctx.beginPath(); ctx.ellipse(12-legSwing*0.3,44+Math.abs(legSwing)*0.3,9,6,-legSwing*0.02,0,Math.PI*2); ctx.fillStyle='#f4a0a0'; ctx.fill(); ctx.strokeStyle='#c97070'; ctx.lineWidth=1.5; ctx.stroke();
-  // 머리
-  ctx.beginPath(); ctx.ellipse(0,-10,24,22,0,0,Math.PI*2); ctx.fillStyle=h.bodyColor; ctx.fill(); ctx.strokeStyle='#7a5230'; ctx.lineWidth=2.5; ctx.stroke();
-  // 볼
-  ctx.beginPath(); ctx.ellipse(-14,-4,8,6,0,0,Math.PI*2); ctx.fillStyle='rgba(255,160,160,0.45)'; ctx.fill();
-  ctx.beginPath(); ctx.ellipse(14,-4,8,6,0,0,Math.PI*2); ctx.fillStyle='rgba(255,160,160,0.45)'; ctx.fill();
-  // 눈
-  if(h.isBlinking){
-    ctx.beginPath(); ctx.moveTo(-9,-14); ctx.lineTo(-5,-14); ctx.moveTo(5,-14); ctx.lineTo(9,-14);
-    ctx.strokeStyle='#2a1a0a'; ctx.lineWidth=2.5; ctx.lineCap='round'; ctx.stroke();
+function drawHamster(ctx, h, time) {
+  const x = h.x;
+  const y = h.y;
+  const dir = h.dir;
+  const bob = Math.sin(time * 0.005 + h.bobOffset) * 1.5;
+  const walkCycle = h.isPaused ? 0 : Math.sin(time * 0.012 + h.bobOffset);
+
+  ctx.save();
+  ctx.translate(x, y + bob);
+  ctx.scale(dir, 1);
+
+  const S = 0.65; // 50% 축소
+  ctx.scale(S, S);
+
+  // 그림자
+  ctx.save();
+  ctx.scale(1, 0.25);
+  ctx.beginPath();
+  ctx.ellipse(0, 52, 22, 7, 0, 0, Math.PI*2);
+  ctx.fillStyle = 'rgba(0,0,0,0.13)';
+  ctx.fill();
+  ctx.restore();
+
+  // 걷기 - 몸통 좌우 기울기
+  const tilt = h.isPaused ? 0 : walkCycle * 0.08;
+  ctx.rotate(tilt);
+
+  // ── 귀 ──
+  ctx.beginPath();
+  ctx.ellipse(-18, -22, 11, 13, -0.25, 0, Math.PI*2);
+  ctx.fillStyle = '#7a5230';
+  ctx.fill();
+  ctx.beginPath();
+  ctx.ellipse(-18, -22, 7, 9, -0.25, 0, Math.PI*2);
+  ctx.fillStyle = h.cheekColor;
+  ctx.fill();
+
+  ctx.beginPath();
+  ctx.ellipse(18, -23, 11, 13, 0.25, 0, Math.PI*2);
+  ctx.fillStyle = '#7a5230';
+  ctx.fill();
+  ctx.beginPath();
+  ctx.ellipse(18, -23, 7, 9, 0.25, 0, Math.PI*2);
+  ctx.fillStyle = h.cheekColor;
+  ctx.fill();
+
+  // ── 몸통 ──
+  ctx.beginPath();
+  ctx.ellipse(0, 18, 26, 28, 0, 0, Math.PI*2);
+  ctx.fillStyle = h.bodyColor;
+  ctx.fill();
+  ctx.strokeStyle = '#7a5230';
+  ctx.lineWidth = 2.5;
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.moveTo(-18, 28);
+  ctx.quadraticCurveTo(0, 38, 18, 28);
+  ctx.strokeStyle = '#7a5230';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // ── 배 ──
+  ctx.beginPath();
+  ctx.ellipse(0, 22, 16, 18, 0, 0, Math.PI*2);
+  ctx.fillStyle = h.cheekColor;
+  ctx.fill();
+
+  // ── 팔 (걸을 때 흔들림) ──
+  const armSwing = walkCycle * 5;
+  ctx.beginPath();
+  ctx.ellipse(-24, 14 + armSwing, 8, 11, -0.4, 0, Math.PI*2);
+  ctx.fillStyle = h.bodyColor;
+  ctx.fill();
+  ctx.strokeStyle = '#7a5230';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.ellipse(24, 14 - armSwing, 8, 11, 0.4, 0, Math.PI*2);
+  ctx.fillStyle = h.bodyColor;
+  ctx.fill();
+  ctx.strokeStyle = '#7a5230';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // ── 발 (걸을 때 교차) ──
+  const legSwing = walkCycle * 6;
+  // 왼발
+  ctx.beginPath();
+  ctx.ellipse(-12 + legSwing * 0.3, 44 - Math.abs(legSwing) * 0.3, 9, 6, legSwing * 0.02, 0, Math.PI*2);
+  ctx.fillStyle = '#f4a0a0';
+  ctx.fill();
+  ctx.strokeStyle = '#c97070';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+
+  // 오른발
+  ctx.beginPath();
+  ctx.ellipse(12 - legSwing * 0.3, 44 + Math.abs(legSwing) * 0.3, 9, 6, -legSwing * 0.02, 0, Math.PI*2);
+  ctx.fillStyle = '#f4a0a0';
+  ctx.fill();
+  ctx.strokeStyle = '#c97070';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+
+  // ── 머리 ──
+  ctx.beginPath();
+  ctx.ellipse(0, -10, 24, 22, 0, 0, Math.PI*2);
+  ctx.fillStyle = h.bodyColor;
+  ctx.fill();
+  ctx.strokeStyle = '#7a5230';
+  ctx.lineWidth = 2.5;
+  ctx.stroke();
+
+  // ── 볼터치 ──
+  ctx.beginPath();
+  ctx.ellipse(-14, -4, 8, 6, 0, 0, Math.PI*2);
+  ctx.fillStyle = 'rgba(255,160,160,0.45)';
+  ctx.fill();
+  ctx.beginPath();
+  ctx.ellipse(14, -4, 8, 6, 0, 0, Math.PI*2);
+  ctx.fillStyle = 'rgba(255,160,160,0.45)';
+  ctx.fill();
+
+  // ── 눈 ──
+  if (h.isBlinking) {
+    ctx.beginPath();
+    ctx.moveTo(-9, -14); ctx.lineTo(-5, -14);
+    ctx.moveTo(5, -14);  ctx.lineTo(9, -14);
+    ctx.strokeStyle = '#2a1a0a';
+    ctx.lineWidth = 2.5;
+    ctx.lineCap = 'round';
+    ctx.stroke();
   } else {
-    ctx.beginPath(); ctx.arc(-7,-15,6,0,Math.PI*2); ctx.fillStyle='#fff'; ctx.fill();
-    ctx.beginPath(); ctx.arc(7,-15,6,0,Math.PI*2); ctx.fillStyle='#fff'; ctx.fill();
-    ctx.beginPath(); ctx.arc(-7,-14,4,0,Math.PI*2); ctx.fillStyle='#1a1a1a'; ctx.fill();
-    ctx.beginPath(); ctx.arc(7,-14,4,0,Math.PI*2); ctx.fillStyle='#1a1a1a'; ctx.fill();
-    ctx.beginPath(); ctx.arc(-5,-16,1.5,0,Math.PI*2); ctx.arc(9,-16,1.5,0,Math.PI*2); ctx.fillStyle='#fff'; ctx.fill();
+    ctx.beginPath();
+    ctx.arc(-7, -15, 6, 0, Math.PI*2);
+    ctx.fillStyle = '#fff';
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(7, -15, 6, 0, Math.PI*2);
+    ctx.fillStyle = '#fff';
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(-7, -14, 4, 0, Math.PI*2);
+    ctx.fillStyle = '#1a1a1a';
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(7, -14, 4, 0, Math.PI*2);
+    ctx.fillStyle = '#1a1a1a';
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(-5, -16, 1.5, 0, Math.PI*2);
+    ctx.arc(9, -16, 1.5, 0, Math.PI*2);
+    ctx.fillStyle = '#fff';
+    ctx.fill();
   }
-  // 코·입
-  ctx.beginPath(); ctx.ellipse(0,-6,3.5,2.5,0,0,Math.PI*2); ctx.fillStyle='#d97070'; ctx.fill();
-  ctx.beginPath(); ctx.moveTo(-5,-2); ctx.quadraticCurveTo(-2,1,0,-1); ctx.quadraticCurveTo(2,1,5,-2); ctx.strokeStyle='#7a5230'; ctx.lineWidth=2; ctx.lineCap='round'; ctx.stroke();
+
+  // ── 코 ──
+  ctx.beginPath();
+  ctx.ellipse(0, -6, 3.5, 2.5, 0, 0, Math.PI*2);
+  ctx.fillStyle = '#d97070';
+  ctx.fill();
+
+  // ── 입 ──
+  ctx.beginPath();
+  ctx.moveTo(-5, -2);
+  ctx.quadraticCurveTo(-2, 1, 0, -1);
+  ctx.quadraticCurveTo(2, 1, 5, -2);
+  ctx.strokeStyle = '#7a5230';
+  ctx.lineWidth = 2;
+  ctx.lineCap = 'round';
+  ctx.stroke();
+
   ctx.restore();
 
-  // 이름표
-  const nameY=y+bob-30;
-  ctx.save(); ctx.font='bold 11px "Noto Sans KR",sans-serif';
-  const tw=ctx.measureText(h.name).width;
-  const bx=x-tw/2-8, by=nameY-18, bw=tw+16, bh=18;
-  ctx.beginPath(); ctx.roundRect(bx,by,bw,bh,8); ctx.fillStyle='rgba(255,255,255,0.93)'; ctx.fill(); ctx.strokeStyle=h.bodyColor; ctx.lineWidth=1.8; ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(x-5,by+bh); ctx.lineTo(x,by+bh+5); ctx.lineTo(x+5,by+bh); ctx.fillStyle='rgba(255,255,255,0.93)'; ctx.fill(); ctx.strokeStyle=h.bodyColor; ctx.lineWidth=1.8; ctx.stroke();
-  ctx.fillStyle='#444'; ctx.fillText(h.name,x-tw/2,nameY-4); ctx.restore();
+  // ── 이름표 ──
+  const nameY = y + bob - 30;
+  ctx.save();
+  ctx.font = 'bold 11px "Noto Sans KR", sans-serif';
+  const tw = ctx.measureText(h.name).width;
+  const px = 8, py = 4;
+  const bx = x - tw/2 - px;
+  const by = nameY - 14 - py;
+  const bw = tw + px*2;
+  const bh = 14 + py*2;
 
-  // 말풍선
-  if(h.showSaying){
-    const alpha=Math.min(1,h.sayingTimer/20);
-    const sayY=nameY-30;
-    ctx.save(); ctx.globalAlpha=alpha; ctx.font='bold 12px "Noto Sans KR",sans-serif';
-    const sw=ctx.measureText(h.saying).width;
-    const sbx=x-sw/2-10, sby=sayY-22, sbw=sw+20, sbh=22;
-    ctx.beginPath(); ctx.roundRect(sbx,sby,sbw,sbh,10); ctx.fillStyle='#fff9e6'; ctx.fill(); ctx.strokeStyle=h.bodyColor; ctx.lineWidth=2; ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(x-6,sby+sbh); ctx.lineTo(x,sby+sbh+7); ctx.lineTo(x+6,sby+sbh); ctx.fillStyle='#fff9e6'; ctx.fill(); ctx.strokeStyle=h.bodyColor; ctx.lineWidth=2; ctx.stroke();
-    ctx.fillStyle='#333'; ctx.fillText(h.saying,x-sw/2,sayY-6); ctx.restore();
+  ctx.beginPath();
+  ctx.roundRect(bx, by, bw, bh, 8);
+  ctx.fillStyle = 'rgba(255,255,255,0.93)';
+  ctx.fill();
+  ctx.strokeStyle = h.bodyColor;
+  ctx.lineWidth = 1.8;
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.moveTo(x - 5, by + bh);
+  ctx.lineTo(x, by + bh + 5);
+  ctx.lineTo(x + 5, by + bh);
+  ctx.fillStyle = 'rgba(255,255,255,0.93)';
+  ctx.fill();
+  ctx.strokeStyle = h.bodyColor;
+  ctx.lineWidth = 1.8;
+  ctx.stroke();
+
+  ctx.fillStyle = '#444';
+  ctx.fillText(h.name, x - tw/2, nameY - 4);
+  ctx.restore();
+
+  // ── 말버릇 말풍선 ──
+  if(h.showSaying) {
+    const alpha = Math.min(1, h.sayingTimer / 20) * Math.min(1, (h.sayingTimer > 0 ? 1 : 0));
+    const sayY = nameY - 30;
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.font = 'bold 12px "Noto Sans KR", sans-serif';
+    const sw = ctx.measureText(h.saying).width;
+    const spx = 10, spy = 6;
+    const sbx = x - sw/2 - spx;
+    const sby = sayY - 16 - spy;
+    const sbw = sw + spx*2;
+    const sbh = 16 + spy*2;
+
+    // 말풍선 배경 (둥근 사각형)
+    ctx.beginPath();
+    ctx.roundRect(sbx, sby, sbw, sbh, 10);
+    ctx.fillStyle = '#fff9e6';
+    ctx.fill();
+    ctx.strokeStyle = h.bodyColor;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // 꼬리 (아래 방향 삼각형)
+    ctx.beginPath();
+    ctx.moveTo(x - 6, sby + sbh);
+    ctx.lineTo(x, sby + sbh + 7);
+    ctx.lineTo(x + 6, sby + sbh);
+    ctx.fillStyle = '#fff9e6';
+    ctx.fill();
+    ctx.strokeStyle = h.bodyColor;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    ctx.fillStyle = '#333';
+    ctx.fillText(h.saying, x - sw/2, sayY - 6);
+    ctx.restore();
   }
 }
 
-const seeds=[];
-function spawnSeed(x,y){
-  seeds.push({ x, y, vx:(Math.random()-0.5)*3, vy:-(Math.random()*3+2), rot:Math.random()*Math.PI*2, rotV:(Math.random()-0.5)*0.2, life:1.0, size:Math.random()*4+5 });
+let lastTime = 0;
+
+// ── 해바라기씨 ──
+const seeds = [];
+
+function spawnSeed(x, y) {
+  seeds.push({
+    x, y,
+    vx: (Math.random() - 0.5) * 3,
+    vy: -(Math.random() * 3 + 2),
+    rot: Math.random() * Math.PI * 2,
+    rotV: (Math.random() - 0.5) * 0.2,
+    life: 1.0,   // 1 → 0 페이드아웃
+    size: Math.random() * 4 + 5,
+  });
 }
-function drawSeed(ctx,s){
-  ctx.save(); ctx.globalAlpha=s.life; ctx.translate(s.x,s.y); ctx.rotate(s.rot);
-  ctx.beginPath(); ctx.ellipse(0,0,s.size*0.45,s.size*0.75,0,0,Math.PI*2); ctx.fillStyle='#3d2b0e'; ctx.fill();
-  ctx.beginPath(); ctx.moveTo(-s.size*0.2,-s.size*0.5); ctx.lineTo(-s.size*0.2,s.size*0.5); ctx.strokeStyle='rgba(255,255,255,0.25)'; ctx.lineWidth=1; ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(-s.size*0.3,-s.size*0.6); ctx.lineTo(0,-s.size*0.9); ctx.lineTo(s.size*0.3,-s.size*0.6); ctx.fillStyle='#5a3d18'; ctx.fill();
+
+function drawSeed(ctx, s) {
+  ctx.save();
+  ctx.globalAlpha = s.life;
+  ctx.translate(s.x, s.y);
+  ctx.rotate(s.rot);
+
+  // 씨 몸체 (타원)
+  ctx.beginPath();
+  ctx.ellipse(0, 0, s.size * 0.45, s.size * 0.75, 0, 0, Math.PI*2);
+  ctx.fillStyle = '#3d2b0e';
+  ctx.fill();
+
+  // 씨 줄무늬
+  ctx.beginPath();
+  ctx.moveTo(-s.size*0.2, -s.size*0.5);
+  ctx.lineTo(-s.size*0.2,  s.size*0.5);
+  ctx.strokeStyle = 'rgba(255,255,255,0.25)';
+  ctx.lineWidth = 1;
+  ctx.stroke();
+
+  // 씨 끝 뾰족한 부분
+  ctx.beginPath();
+  ctx.moveTo(-s.size*0.3, -s.size*0.6);
+  ctx.lineTo(0, -s.size*0.9);
+  ctx.lineTo(s.size*0.3, -s.size*0.6);
+  ctx.fillStyle = '#5a3d18';
+  ctx.fill();
+
   ctx.restore();
 }
-function updateSeeds(){
-  for(let i=seeds.length-1;i>=0;i--){
-    const s=seeds[i]; s.x+=s.vx; s.y+=s.vy; s.vy+=0.15; s.rot+=s.rotV; s.life-=0.012;
-    if(s.life<=0) seeds.splice(i,1);
+
+function updateSeeds() {
+  for(let i = seeds.length - 1; i >= 0; i--) {
+    const s = seeds[i];
+    s.x += s.vx;
+    s.y += s.vy;
+    s.vy += 0.15; // 중력
+    s.rot += s.rotV;
+    s.life -= 0.012;
+    if(s.life <= 0) seeds.splice(i, 1);
   }
 }
 
-function animate(time){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  updateSeeds(); seeds.forEach(s=>drawSeed(ctx,s));
-  hamsters.forEach(h=>{
+function animate(time) {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // 씨 업데이트 & 그리기
+  updateSeeds();
+  seeds.forEach(s => drawSeed(ctx, s));
+
+  hamsters.forEach(h => {
+    // 깜빡임
     h.blinkTimer--;
-    if(h.blinkTimer<=0){ h.isBlinking=!h.isBlinking; h.blinkTimer=h.isBlinking?8:Math.floor(Math.random()*180+60); }
+    if(h.blinkTimer <= 0){
+      h.isBlinking = !h.isBlinking;
+      h.blinkTimer = h.isBlinking ? 8 : Math.floor(Math.random()*180 + 60);
+    }
+
+    // 멈춤
     if(!h.isPaused){
       h.pauseTimer--;
-      if(h.pauseTimer<=0){
-        h.isPaused=true; h.pauseTimer=Math.floor(Math.random()*80+30);
-        if(Math.random()<0.55){ const count=Math.floor(Math.random()*4)+2; for(let i=0;i<count;i++) setTimeout(()=>spawnSeed(h.x+(Math.random()-0.5)*20,h.y-10),i*80); }
-        if(Math.random()<0.6){ h.showSaying=true; h.sayingTimer=180; }
+      if(h.pauseTimer <= 0){
+        h.isPaused = true;
+        h.pauseTimer = Math.floor(Math.random()*80 + 30);
+
+        // 멈출 때 가끔 씨 뿌리기 🌻
+        if(Math.random() < 0.55) {
+          const count = Math.floor(Math.random() * 4) + 2;
+          for(let i = 0; i < count; i++) {
+            setTimeout(() => spawnSeed(
+              h.x + (Math.random()-0.5)*20,
+              h.y - 10
+            ), i * 80);
+          }
+        }
+
+        // 멈출 때 가끔 말풍선 표시 💬
+        if(Math.random() < 0.6) {
+          h.showSaying = true;
+          h.sayingTimer = 180; // 약 3초
+        }
       }
     } else {
       h.pauseTimer--;
-      if(h.pauseTimer<=0){ h.isPaused=false; h.pauseTimer=Math.floor(Math.random()*300+150); if(Math.random()<0.4) h.vx=-h.vx; }
+      if(h.pauseTimer <= 0){
+        h.isPaused = false;
+        h.pauseTimer = Math.floor(Math.random()*300 + 150);
+        if(Math.random() < 0.4) h.vx = -h.vx;
+      }
     }
-    if(!h.isPaused){ h.x+=h.vx; h.y+=h.vy; h.dir=h.vx>0?1:-1; }
-    const margin=40;
-    if(h.x<margin){ h.x=margin; h.vx=Math.abs(h.vx); }
-    if(h.x>canvas.width-margin){ h.x=canvas.width-margin; h.vx=-Math.abs(h.vx); }
-    if(h.y<100){ h.y=100; h.vy=Math.abs(h.vy); }
-    if(h.y>canvas.height-50){ h.y=canvas.height-50; h.vy=-Math.abs(h.vy)*0.5; }
-    if(!h.isPaused&&Math.random()<0.01){ h.vy+=(Math.random()-0.5)*0.3; h.vy=Math.max(-1,Math.min(1,h.vy)); }
-    if(h.showSaying){ h.sayingTimer--; if(h.sayingTimer<=0) h.showSaying=false; }
-    drawHamster(ctx,h,time);
+
+    if(!h.isPaused){
+      h.x += h.vx;
+      h.y += h.vy;
+      h.dir = h.vx > 0 ? 1 : -1;
+    }
+
+    // 경계 처리
+    const margin = 40;
+    if(h.x < margin){ h.x = margin; h.vx = Math.abs(h.vx); }
+    if(h.x > canvas.width - margin){ h.x = canvas.width - margin; h.vx = -Math.abs(h.vx); }
+    if(h.y < 100){ h.y = 100; h.vy = Math.abs(h.vy); }
+    if(h.y > canvas.height - 50){ h.y = canvas.height - 50; h.vy = -Math.abs(h.vy) * 0.5; }
+
+    if(!h.isPaused && Math.random() < 0.01){
+      h.vy += (Math.random() - 0.5) * 0.3;
+      h.vy = Math.max(-1, Math.min(1, h.vy));
+    }
+
+    // 말풍선 타이머 감소
+    if(h.showSaying) {
+      h.sayingTimer--;
+      if(h.sayingTimer <= 0) h.showSaying = false;
+    }
+
+    drawHamster(ctx, h, time);
   });
+
   requestAnimationFrame(animate);
 }
 requestAnimationFrame(animate);
